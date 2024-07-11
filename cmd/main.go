@@ -8,5 +8,9 @@ import (
 func main() {
     e := echo.New()
 
+    homeHandler := handler.HomeHandler{}
+
+    e.GET("/", homeHandler.HandleHome)
+
     e.Logger.Fatal(e.Start(":8080"))
 }

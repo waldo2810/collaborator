@@ -1,0 +1,25 @@
+package views
+
+templ Layout(contents templ.Component, title string) {
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>{ title }</title>
+		</head>
+		<body>
+            <nav>
+                <div>
+                    <h1>{ title }</h1>
+                    <ul>
+                        <li>About</li>
+                        <li>Support</li>
+                    </ul>
+                </div>
+            </nav>
+            <main>
+                @contents
+            </main>
+        </body>
+	</html>
+}
