@@ -7,26 +7,32 @@ templ Layout(contents templ.Component, title string) {
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-            if os.Getenv("env") == "production" {
-                <link rel="stylesheet" href="/static/css/style.min.css"/>
-            } else {
-                <link rel="stylesheet" href="/static/css/style.css"/>
-            }
-            <title>{ title }</title>
+			if os.Getenv("env") == "production" {
+				<link rel="stylesheet" href="/static/css/style.min.css"/>
+			} else {
+				<link rel="stylesheet" href="/static/css/style.css"/>
+			}
+			<title>{ title }</title>
 		</head>
-		<body>
-            <nav>
-                <div class="flex items-center justify-between">
-                    <h1 class="font-bold">{ title }</h1>
-                    <ul class="flex items-center">
-                        <li>About</li>
-                        <li>Support</li>
-                    </ul>
-                </div>
-            </nav>
-            <main>
-                @contents
-            </main>
-        </body>
+		<body class="px-3 py-2">
+			<nav>
+				<div class="flex items-center justify-between text-sm">
+					<h1 class="font-bold">
+						<a href="/">{ title }</a>
+					</h1>
+					<ul class="flex items-center gap-2">
+						<li>
+							<a href="/about">About</a>
+						</li>
+						<li>
+							<a href="/support">Support</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+			<main>
+				@contents
+			</main>
+		</body>
 	</html>
 }
