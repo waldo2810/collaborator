@@ -19,6 +19,19 @@ func NewServer() *Server {
 	}
 }
 
+func (s *Server) broadcast(msg []byte) {
+	fmt.Println("\nBroadcasting...")
+	for ws := range s.clients {
+		connected := s.clients[ws]
+		if connected {
+			_, err := ws.Write(msg)
+			if err != nil {
+				fmt.Println("Error broadcasting msg", err)
+			}
+		}
+	}
+}
+
 func (s *Server) readLoop(ws *websocket.Conn) {
 	buf := make([]byte, 1024)
 	for {
@@ -32,12 +45,13 @@ func (s *Server) readLoop(ws *websocket.Conn) {
 			continue
 		}
 		msg := buf[:n]
-		fmt.Printf("Received message\nClient: %q\nMessage: %q", ws.RemoteAddr(), msg)
+		fmt.Printf("\nReceived message from Client: %q. Content: %q.", ws.RemoteAddr(), msg)
+		s.broadcast(msg)
 	}
 }
 
 func (s *Server) HandleWS(ws *websocket.Conn) {
-	fmt.Printf("New connection from address %q.", ws.RemoteAddr())
+	fmt.Printf("\nNew connection from address %q.", ws.RemoteAddr())
 
 	s.mutex.Lock()
 	s.clients[ws] = true
