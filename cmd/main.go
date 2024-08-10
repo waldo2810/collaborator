@@ -1,19 +1,28 @@
 package main
 
 import (
-    "github.com/labstack/echo/v4"
-    "github.com/waldo2810/collaborator/internal/handler"
+	"github.com/labstack/echo/v4"
+	"github.com/waldo2810/collaborator/internal/handler"
+	myWS "github.com/waldo2810/collaborator/internal/websocket"
+	"golang.org/x/net/websocket"
 )
 
 func main() {
-    e := echo.New()
+	e := echo.New()
 
-    // Static files
-    e.Static("/static","static")
+	// Websocket server
+	myWSServer := myWS.NewServer()
+	e.GET("/ws", func(c echo.Context) error {
+		websocket.Handler(myWSServer.HandleWS).ServeHTTP(c.Response().Writer, c.Request())
+		return nil
+	})
 
-    homeHandler := handler.HomeHandler{}
+	// Static files
+	e.Static("/static", "static")
 
-    e.GET("/", homeHandler.HandleHome)
+	homeHandler := handler.HomeHandler{}
 
-    e.Logger.Fatal(e.Start(":8080"))
+	e.GET("/", homeHandler.HandleHome)
+
+	e.Logger.Fatal(e.Start(":8080"))
 }
